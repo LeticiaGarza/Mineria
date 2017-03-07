@@ -290,6 +290,11 @@ public class Principal extends javax.swing.JFrame {
         jMenu1.add(jMenuItem2);
 
         jMenuItem3.setText("Guardar como...");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
         jMenu1.add(jMenuItem3);
         jMenu1.add(jSeparator1);
 
@@ -453,10 +458,38 @@ public class Principal extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton5ActionPerformed
 
+
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         eliminarInstancia();
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        // TODO add your handling code here:
+            try {
+            FileNameExtensionFilter filtro = new FileNameExtensionFilter("Archivos .arff","arff");
+            JFileChooser selector = new JFileChooser();
+            selector.setFileFilter(filtro);
+            selector.showOpenDialog(this);
+            
+            File elegido = selector.getSelectedFile();
+            
+            if(elegido!=null){
+                nombreArchivo=elegido.getPath();
+                
+                LeerArchivos leerA = new LeerArchivos();
+                leerA.guardarContenido(nombreArchivo,relacion);
+            }
+            cargarATabla();
+            cargarAtributosALista();
+        }
+        catch(Exception e)
+        {
+        
+        }
+          
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
 
 
     public static void main(String args[]) {
