@@ -416,27 +416,6 @@ public class Principal extends javax.swing.JFrame {
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
         // TODO add your handling code here:
-        try {
-            FileNameExtensionFilter filtro = new FileNameExtensionFilter("Archivos .arff","arff");
-            JFileChooser selector = new JFileChooser();
-            selector.setFileFilter(filtro);
-            selector.showOpenDialog(this);
-            
-            File elegido = selector.getSelectedFile();
-            
-            if(elegido!=null){
-                nombreArchivo=elegido.getPath();
-                
-                LeerArchivos leerA = new LeerArchivos();
-                leerA.guardarContenido(nombreArchivo,relacion);
-            }
-            cargarATabla();
-            cargarAtributosALista();
-        }
-        catch(Exception e)
-        {
-            System.out.println("Error 1 "+e);
-        }
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
 
