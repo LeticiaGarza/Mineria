@@ -17,6 +17,8 @@ public class Principal extends javax.swing.JFrame {
     Relacion relacion;
     String nombreArchivo;
     
+    DefaultTableModel modelo;//Ese modelo es el que usa la tabla
+    
     public Principal() {
         initComponents();
         relacion = new Relacion();
@@ -110,6 +112,11 @@ public class Principal extends javax.swing.JFrame {
         );
 
         jButton2.setText("Eliminar");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton1.setText("Agregar instancia");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -340,11 +347,11 @@ public class Principal extends javax.swing.JFrame {
         //LeerArchivos leer = new LeerArchivos();
         //leer.muestraContenido();
     }//GEN-LAST:event_jMenuItem1ActionPerformed
-    private void cargarATabla()
+    private void cargarATabla()//Guarda a tabla desde la estructura, por primera vez (NO MANDARLO LLAMAR MAS)
     {
-        DefaultTableModel modelo = crearModelo();
+        modelo = crearModelo();//Modelo para la tabla
         int contadorInstancia=1;
-        for(Dato actual:relacion.getInstancia())
+        for(Dato actual:relacion.getInstancia())//Recorre el atributo relacion para llenar la tabla
         {
             Object[] objeto = new Object[actual.getValores().size()+1];
             objeto[0]=contadorInstancia;
@@ -359,16 +366,52 @@ public class Principal extends javax.swing.JFrame {
     }
     private void cargarAtributosALista()
     {
-        DefaultListModel<String> modeloLista = new DefaultListModel<>();
+        /*DefaultListModel<String> modeloLista = new DefaultListModel<>();
         for(Atributo actual:relacion.getAtributos())
         {
             modeloLista.addElement(actual.getNombre());
         }
+        jList1.setModel(modeloLista);*/
+        DefaultListModel<String> modeloLista = new DefaultListModel<>();
+        for(int i=1;i<modelo.getColumnCount();i++)
+        {
+           modeloLista.addElement(modelo.getColumnName(i));
+        }
         jList1.setModel(modeloLista);
+        
     }
-    private DefaultTableModel crearModelo()
+    private void agregarInstancia()//Agrega una instancia a la tabla
     {
-        DefaultTableModel modelo = new DefaultTableModel();
+        //instanciaConfiguracion ic = new instanciaConfiguracion(this.relacion);
+        Object[] aMeter = new Object[modelo.getColumnCount()];
+        aMeter[0]=modelo.getRowCount()+1;
+        for(int i=1;i<modelo.getColumnCount();i++)
+        {
+            aMeter[i]=relacion.valorNulo;
+        }
+        modelo.addRow(aMeter);
+        actualizarTabla();
+        
+    }
+    private void eliminarInstancia()//Elimina ls instancias seleccionadas
+    {
+        if(jTable1.getSelectedRowCount()==1)
+        {
+            modelo.removeRow(jTable1.getSelectedRow());
+            for(int i=0;i<jTable1.getRowCount();i++)
+            {
+                modelo.setValueAt(i+1, i, 0);
+            }
+            actualizarTabla();
+        }
+    }
+    private void actualizarTabla()
+    {
+        jTable1.setModel(modelo);
+    }
+    private DefaultTableModel crearModelo()//Carga el modelo a la tabla,a partir de los datos de la estructura
+    {
+        modelo = new DefaultTableModel();
         modelo.addColumn("id");
         for(Atributo actual:relacion.getAtributos())
         {
@@ -377,13 +420,14 @@ public class Principal extends javax.swing.JFrame {
         return modelo;
     }
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        instanciaConfiguracion iC = new instanciaConfiguracion();
-        iC.setVisible(true);
+        //instanciaConfiguracion iC = new instanciaConfiguracion(this.relacion);
+        //iC.setVisible(true);
+        agregarInstancia();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
 
-        instanciaConfiguracion iC = new instanciaConfiguracion();
+        instanciaConfiguracion iC = new instanciaConfiguracion(this.relacion);
         iC.setVisible(true);
     }//GEN-LAST:event_jButton6ActionPerformed
 
@@ -408,6 +452,11 @@ public class Principal extends javax.swing.JFrame {
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        eliminarInstancia();
+    }//GEN-LAST:event_jButton2ActionPerformed
 
 
     public static void main(String args[]) {

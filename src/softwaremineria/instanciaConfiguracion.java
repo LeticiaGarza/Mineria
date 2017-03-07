@@ -4,9 +4,18 @@ package softwaremineria;
 public class instanciaConfiguracion extends javax.swing.JFrame {
 
     Relacion relacion;
-    public instanciaConfiguracion() {
-        //this.relacion=relacion;
+    public instanciaConfiguracion(Relacion relacion) {
         initComponents();
+        this.relacion=relacion;
+        this.setVisible(true);
+    }
+    
+    public void cargarAtributos()
+    {
+        for(Atributo actual:relacion.atributos)//Recorre los atributos y los pone en el combobox
+        {
+            jComboBox1.addItem(actual.nombre);
+        }
     }
 
     
@@ -140,7 +149,7 @@ public class instanciaConfiguracion extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new instanciaConfiguracion().setVisible(true);
+                new instanciaConfiguracion(null).setVisible(true);
             }
         });
     }
